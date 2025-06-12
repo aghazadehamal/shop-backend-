@@ -3,8 +3,11 @@ const app = express();
 require("dotenv").config();
 const cors = require("cors");
 
-app.use(express.json());
-app.use(cors()); // bütün domain-lərə icazə verir
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
+
 
 
 // Route-ları qoş
