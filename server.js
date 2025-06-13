@@ -8,7 +8,7 @@ app.use(cors({
   credentials: true
 }));
 
-
+app.use(express.json()); // <-- BUNU ƏLAVƏ ETDİN
 
 // Route-ları qoş
 app.use("/api/auth", require("./routes/auth"));
