@@ -1,4 +1,4 @@
-const pool = require('../../db'); // DB bağlantısı varsa
+const pool = require('../db'); // DB bağlantısı varsa
 
 exports.createOrder = async (req, res) => {
   const { items, total_amount } = req.body;

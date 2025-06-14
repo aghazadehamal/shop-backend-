@@ -14,7 +14,7 @@ app.use(express.json()); // JSON body parse üçün vacibdir
 // 🔁 Route-lar
 app.use("/api/auth", require("./routes/auth"));      // Login/Register üçün
 app.use("/api/cars", require("./routes/carRoutes")); // Yeni - avtomobil elanları
-app.use("/api/orders", require("./routes/orderRoutes")); // əgər sifariş sistemini saxlayırsansa
+
 
 // 🌐 Test endpoint
 app.get("/", (req, res) => {
