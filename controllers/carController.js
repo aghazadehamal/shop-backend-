@@ -23,13 +23,14 @@ exports.createCar = async (req, res) => {
 exports.getAllCars = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM cars ORDER BY created_at DESC");
-    console.log("DB-dən gələn nəticə:", result.rows);
+    console.log("result.rows:", result.rows);
     res.json(result.rows);
   } catch (err) {
-    console.error("Xəta:", err.message); // bu hissəni əlavə et
+    console.error("Xəta getAllCars:", err.message); // bunu əlavə et
     res.status(500).json({ message: "Elanlar yüklənmədi" });
   }
 };
+
 
 
 // Bir elanı gətir
