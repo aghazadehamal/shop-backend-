@@ -6,7 +6,7 @@ const {
   getCarById,
   deleteCar
 } = require("../controllers/carController");
-const { verifyToken } = require("../server/middleware/authMiddleware");
+const { verifyToken } = require("../middleware/authMiddleware");
 
 router.get("/", getAllCars);
 router.get("/:id", getCarById);
