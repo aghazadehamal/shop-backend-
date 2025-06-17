@@ -1,9 +1,12 @@
 const pool = require('../db');
 
-// Elan əlavə et
+// Elan əlavə et (şəkil ilə)
 exports.createCar = async (req, res) => {
-  const { marka, model, il, yürüş, price, description, image_url } = req.body;
+  const { marka, model, il, yürüş, price, description } = req.body;
   const userId = req.user.userId;
+
+  // Multer vasitəsilə gələn şəkilin URL-i
+  const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
   try {
     const result = await pool.query(
@@ -26,12 +29,10 @@ exports.getAllCars = async (req, res) => {
     console.log("result.rows:", result.rows);
     res.json(result.rows);
   } catch (err) {
-    console.error("Xəta getAllCars:", err.message); // bunu əlavə et
+    console.error("🔥 getAllCars Error:", err);
     res.status(500).json({ message: "Elanlar yüklənmədi" });
   }
 };
-
-
 
 // Bir elanı gətir
 exports.getCarById = async (req, res) => {
@@ -58,3 +59,31 @@ exports.deleteCar = async (req, res) => {
     res.status(500).json({ message: "Silinmə zamanı xəta baş verdi" });
   }
 };
+
+
+
+// Elanı yenilə
+exports.updateCar = async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user.userId;
+
+  const { marka, model, il, yürüş, price, description } = req.body;
+  const image_url = req.file ? `/uploads/${req.file.filename}` : req.body.image_url;
+
+  try {
+    const result = await pool.query(
+      `UPDATE cars SET marka = $1, model = $2, il = $3, yürüş = $4, price = $5, description = $6, image_url = $7
+       WHERE id = $8 AND user_id = $9 RETURNING *`,
+      [marka, model, il, yürüş, price, description, image_url, id, userId]
+    );
+
+    if (result.rowCount === 0)
+      return res.status(403).json({ message: "Yeniləməyə icazə yoxdur" });
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error("🔥 updateCar Error:", err);
+    res.status(500).json({ message: "Yeniləmə zamanı xəta baş verdi" });
+  }
+};
+

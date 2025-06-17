@@ -1,15 +1,15 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isRender = process.env.DB_URL?.includes('render.com'); // Render bazasına görə yoxlayırıq
 
 const pool = new Pool({
-  connectionString: isProduction ? process.env.DATABASE_URL : process.env.DB_URL,
-  ...(isProduction && {
+  connectionString: process.env.DB_URL,
+  ...(isRender && {
     ssl: {
-      rejectUnauthorized: false
-    }
-  })
+      rejectUnauthorized: false,
+    },
+  }),
 });
 
 module.exports = pool;
