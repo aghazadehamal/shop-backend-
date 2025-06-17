@@ -4,27 +4,28 @@ require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
 
-// CORS konfiqurasiya (əgər frontend Render-dədirsə, linki dəyiş)
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpec = require("./swagger"); // ✅ Əlavə olundu
+
+// CORS konfiqurasiya
 app.use(cors({
   origin: "*"
 }));
 
-
-app.use(express.json()); // JSON body parse üçün vacibdir
-
-// ✅ Şəkilləri göstərmək üçün uploads qovluğunu statik et
+app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// 🔁 Route-lar
-app.use("/api/auth", require("./routes/auth"));      // Login/Register üçün
-app.use("/api/cars", require("./routes/carRoutes")); // Yeni - avtomobil elanları
+// ✅ Swagger endpoint
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
-// 🌐 Test endpoint
+// Route-lar
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/cars", require("./routes/carRoutes"));
+
 app.get("/", (req, res) => {
   res.send("Avtomobil Elanları Backend");
 });
 
-// 🔥 Server start
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
