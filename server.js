@@ -6,9 +6,9 @@ const path = require("path");
 
 // CORS konfiqurasiya (əgər frontend Render-dədirsə, linki dəyiş)
 app.use(cors({
-  origin: "http://localhost:3000", // və ya Render frontend linkin
-  credentials: true
+  origin: "*"
 }));
+
 
 app.use(express.json()); // JSON body parse üçün vacibdir
 
