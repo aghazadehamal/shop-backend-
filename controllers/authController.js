@@ -5,6 +5,11 @@ const pool = require('../db');
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
 
+  // 🚨 Boş sahə yoxlaması
+  if (!username || !email || !password) {
+    return res.status(400).json({ message: 'Bütün sahələr doldurulmalıdır' });
+  }
+
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -15,9 +20,15 @@ exports.register = async (req, res) => {
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
+    // Email təkrarı üçün ayrıca mesaj
+    if (err.code === '23505') {
+      return res.status(409).json({ message: 'Bu email artıq istifadə olunub' });
+    }
+
     res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;

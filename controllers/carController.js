@@ -2,17 +2,15 @@ const pool = require('../db');
 
 // Elan əlavə et (şəkil ilə)
 exports.createCar = async (req, res) => {
-  const { marka, model, il, yürüş, price, description } = req.body;
+  const { marka, model, il, yurus, price, description } = req.body; // <-- yürüş → yurus
   const userId = req.user.userId;
-
-  // Multer vasitəsilə gələn şəkilin URL-i
   const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
   try {
     const result = await pool.query(
-      `INSERT INTO cars (marka, model, il, yürüş, price, description, image_url, user_id)
+      `INSERT INTO cars (marka, model, il, yurus, price, description, image_url, user_id)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
-      [marka, model, il, yürüş, price, description, image_url, userId]
+      [marka, model, il, yurus, price, description, image_url, userId]
     );
 
     res.status(201).json(result.rows[0]);
@@ -67,14 +65,15 @@ exports.updateCar = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.userId;
 
-  const { marka, model, il, yürüş, price, description } = req.body;
+  const { marka, model, il, yurus, price, description } = req.body; // <-- yürüş → yurus
   const image_url = req.file ? `/uploads/${req.file.filename}` : req.body.image_url;
 
   try {
     const result = await pool.query(
-      `UPDATE cars SET marka = $1, model = $2, il = $3, yürüş = $4, price = $5, description = $6, image_url = $7
+      `UPDATE cars 
+       SET marka = $1, model = $2, il = $3, yurus = $4, price = $5, description = $6, image_url = $7
        WHERE id = $8 AND user_id = $9 RETURNING *`,
-      [marka, model, il, yürüş, price, description, image_url, id, userId]
+      [marka, model, il, yurus, price, description, image_url, id, userId]
     );
 
     if (result.rowCount === 0)

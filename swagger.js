@@ -1,4 +1,6 @@
+// swagger.js
 const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 const options = {
   definition: {
@@ -6,17 +8,21 @@ const options = {
     info: {
       title: "Avtomobil Elanları API",
       version: "1.0.0",
-      description: "Avtomobil elanları üçün CRUD API",
+      description: "Turbo.az tipli car listing API"
     },
     servers: [
       {
-        url: "http://localhost:4000",
+        url: "https://shop-backend-le06.onrender.com",
       },
     ],
   },
-  apis: ["./routes/*.js"], // 👉 sənədləri bu fayllardan çəkəcək
+  apis: ["./routes/*.js"], // Burada sənədləri harda yazdığını göstər
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
-module.exports = swaggerSpec;
+const setupSwagger = (app) => {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+};
+
+module.exports = setupSwagger;
