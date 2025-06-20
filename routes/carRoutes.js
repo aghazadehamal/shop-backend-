@@ -5,7 +5,8 @@ const {
   getAllCars,
   getCarById,
   deleteCar,
-  updateCar
+  updateCar,
+    getMyCars 
 } = require("../controllers/carController");
 const { verifyToken } = require("../middleware/authMiddleware");
 const upload = require("../config/cloudinaryStorage");
@@ -154,10 +155,31 @@ const upload = require("../config/cloudinaryStorage");
  *         description: Elan uğurla yeniləndi
  */
 
+
+
+/**
+ * @swagger
+ * /api/cars/my:
+ *   get:
+ *     summary: Giriş etmiş istifadəçinin elanlarını gətir
+ *     tags: [Cars]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Elanlar uğurla gətirildi
+ *       401:
+ *         description: Token etibarsızdır və ya yoxdur
+ */
+
+
 router.get("/", getAllCars);
+router.get("/my", verifyToken, getMyCars); // dəyişiklik burada!
 router.get("/:id", getCarById);
 router.post("/", verifyToken, upload.single("image"), createCar);
 router.delete("/:id", verifyToken, deleteCar);
 router.put("/:id", verifyToken, upload.single("image"), updateCar);
+
+
 
 module.exports = router;
