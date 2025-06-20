@@ -67,7 +67,10 @@ exports.updateCar = async (req, res) => {
   const userId = req.user.userId;
 
   const { marka, model, il, yurus, price, description } = req.body; // <-- yürüş → yurus
-  const image_url = req.file ? `/uploads/${req.file.filename}` : req.body.image_url;
+  const image_url = req.file
+  ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`
+  : req.body.image_url;
+
 
   try {
     const result = await pool.query(
