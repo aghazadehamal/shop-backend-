@@ -4,7 +4,8 @@ const pool = require('../db');
 exports.createCar = async (req, res) => {
   const { marka, model, il, yurus, price, description } = req.body; // <-- yürüş → yurus
   const userId = req.user.userId;
-  const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+const image_url = req.file ? `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}` : null;
+
 
   try {
     const result = await pool.query(
