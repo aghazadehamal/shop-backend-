@@ -8,7 +8,8 @@ const {
   updateCar
 } = require("../controllers/carController");
 const { verifyToken } = require("../middleware/authMiddleware");
-const upload = require("../middleware/uploadMiddleware");
+const upload = require("../config/cloudinaryStorage");
+
 
 /**
  * @swagger
