@@ -1,4 +1,4 @@
-// swagger.js
+
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
@@ -12,11 +12,11 @@ const options = {
     },
     servers: [
       {
-        url: "https://shop-backend-le06.onrender.com",
+        url: "http://localhost:4000",
       },
     ],
   },
-  apis: ["./routes/*.js"], // Burada sənədləri harda yazdığını göstər
+  apis: ["./routes/*.js"], 
 };
 
 const swaggerSpec = swaggerJSDoc(options);

@@ -1,10 +1,10 @@
 const pool = require('../db');
 
-// Elan əlavə et (şəkil ilə)
+
 exports.createCar = async (req, res) => {
 const { marka, model, il, yurus, price, description, phone } = req.body;
   const userId = req.user.userId;
-const image_url = req.file ? req.file.path : null; // Cloudinary URL
+const image_url = req.file ? req.file.path : null; 
 
 
 
@@ -22,7 +22,7 @@ const image_url = req.file ? req.file.path : null; // Cloudinary URL
   }
 };
 
-// Bütün elanları gətir
+
 exports.getAllCars = async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM cars ORDER BY created_at DESC");
@@ -34,7 +34,7 @@ exports.getAllCars = async (req, res) => {
   }
 };
 
-// Bir elanı gətir
+
 exports.getCarById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -46,7 +46,7 @@ exports.getCarById = async (req, res) => {
   }
 };
 
-// Elanı sil
+
 exports.deleteCar = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.userId;
@@ -62,7 +62,7 @@ exports.deleteCar = async (req, res) => {
 
 
 
-// Elanı yenilə
+
 exports.updateCar = async (req, res) => {
   const { id } = req.params;
   const userId = req.user.userId;
@@ -95,7 +95,7 @@ exports.updateCar = async (req, res) => {
 
 
 
-// Yalnız istifadəçinin öz elanlarını gətir
+
 exports.getMyCars = async (req, res) => {
   const userId = req.user.userId;
 

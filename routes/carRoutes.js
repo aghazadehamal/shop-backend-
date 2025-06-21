@@ -174,7 +174,7 @@ const upload = require("../config/cloudinaryStorage");
 
 
 router.get("/", getAllCars);
-router.get("/my", verifyToken, getMyCars); // dəyişiklik burada!
+router.get("/my", verifyToken, getMyCars); 
 router.get("/:id", getCarById);
 router.post("/", verifyToken, upload.single("image"), createCar);
 router.delete("/:id", verifyToken, deleteCar);

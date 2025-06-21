@@ -3,7 +3,7 @@ const app = express();
 require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
-const setupSwagger = require("./swagger"); // ✅ Əlavə et
+const setupSwagger = require("./swagger");
 
 app.use(cors({
   origin: "*"
@@ -12,7 +12,7 @@ app.use(cors({
 app.use(express.json());
 // app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Swagger setup (MÜTLƏQ route-lardan ƏVVƏL yerləşdir)
+
 setupSwagger(app);
 
 app.use("/api/auth", require("./routes/auth"));

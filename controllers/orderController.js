@@ -1,8 +1,8 @@
-const pool = require('../db'); // DB bağlantısı varsa
+const pool = require('../db'); 
 
 exports.createOrder = async (req, res) => {
   const { items, total_amount } = req.body;
-  const userId = req.user.userId; // Token'dən gələn userId
+  const userId = req.user.userId; 
 
   try {
     const orderResult = await pool.query(

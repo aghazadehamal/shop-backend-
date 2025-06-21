@@ -5,7 +5,7 @@ exports.getAllProducts = async (req, res) => {
     const result = await pool.query('SELECT * FROM products');
     res.json(result.rows);
   } catch (err) {
-    console.error("Məhsulları çəkərkən xəta:", err.message);  // Xətanı göstər
+    console.error("Məhsulları çəkərkən xəta:", err.message);  
     res.status(500).json({ message: 'Server xətası' });
   }
 };
