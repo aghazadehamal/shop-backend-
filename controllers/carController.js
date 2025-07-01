@@ -1,26 +1,51 @@
 const pool = require('../db');
 
 
+
+
 exports.createCar = async (req, res) => {
-const { marka, model, il, yurus, price, description, phone } = req.body;
-  const userId = req.user.userId;
-const image_url = req.file ? req.file.path : null; 
+  console.log("🟢 createCar funksiyasına daxil olduq");
+console.log("req.user:", req.user);
+console.log("req.body:", req.body);
+console.log("req.files:", req.files);
 
+  console.log("🟢 createCar funksiyasına daxil olundu");
+  console.log("req.files:", req.files);
+  console.log("req.body:", req.body);
+  console.log("req.user:", req.user);
 
+  const { marka, model, il, yurus, price, description, phone } = req.body;
+  const userId = req.user?.userId;
+
+  const image_urls = req.files ? req.files.map(file => file.path) : [];
 
   try {
     const result = await pool.query(
-      `INSERT INTO cars (marka, model, il, yurus, price, description, image_url, user_id, phone)
- VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
-[marka, model, il, yurus, price, description, image_url, userId, phone]
+      `INSERT INTO cars 
+       (marka, model, il, yurus, price, description, image_urls, user_id, phone)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING *`,
+      [
+        marka,
+        model,
+        il,
+        yurus,
+        price,
+        description,
+        image_urls,
+        userId,
+        phone
+      ]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error("Elan əlavə xətası:", err.message);
+    console.error("Elan əlavə xətası:", err.message); // bunu görmək vacibdir
     res.status(500).json({ message: "Server xətası" });
   }
 };
+
+
 
 
 exports.getAllCars = async (req, res) => {
