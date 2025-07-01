@@ -12,7 +12,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:4000",
+        url: "https://shop-backend-le06.onrender.com",
       },
     ],
   },
