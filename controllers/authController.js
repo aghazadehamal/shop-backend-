@@ -1,51 +1,83 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const pool = require('../db');
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import styles from './Register.module.css';
 
-exports.register = async (req, res) => {
-  const { username, email, password } = req.body;
+const Register = () => {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
+  const navigate = useNavigate();
 
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: 'Bütün sahələr doldurulmalıdır' });
-  }
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch('https://shop-backend-le06.onrender.com/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password }) // phone çıxarıldı
+      });
 
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+      const data = await res.json();
 
-    const result = await pool.query(
-      'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
-      [username, email, hashedPassword]
-    );
-
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-  
-    if (err.code === '23505') {
-      return res.status(409).json({ message: 'Bu email artıq istifadə olunub' });
+      if (res.ok) {
+        alert("✅ Qeydiyyat uğurludur");
+        navigate("/");
+      } else {
+        alert(data.message || "Qeydiyyat zamanı xəta baş verdi");
+      }
+    } catch (err) {
+      console.error('Xəta:', err);
+      alert("Serverə qoşulmaq mümkün olmadı");
     }
+  };
 
-    res.status(500).json({ message: 'Server error' });
-  }
+  return (
+    <div className={styles.container}>
+      <h2 className={styles.heading}>Qeydiyyat</h2>
+
+      <input
+        className={styles.input}
+        type="text"
+        placeholder="İstifadəçi adı"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+
+      <input
+        className={styles.input}
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      <div className={styles.passwordWrapper}>
+        <input
+          className={styles.input}
+          type={showPassword ? "text" : "password"}
+          placeholder="Şifrə"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <span
+          className={styles.togglePassword}
+          onClick={() => setShowPassword(!showPassword)}
+          title="Şifrəni göstər/gizlət"
+        >
+          {showPassword ? "🔒" : "👁️"}
+        </span>
+      </div>
+
+      <button className={styles.button} onClick={handleSubmit}>
+        Qeydiyyatdan keç
+      </button>
+
+      <p className={styles.footerText}>
+        Artıq hesabınız var? <Link to="/login">Daxil olun</Link>
+      </p>
+    </div>
+  );
 };
 
-
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-    const user = result.rows[0];
-
-    if (!user) return res.status(401).json({ message: 'Invalid credentials' });
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
-
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.json({ token });
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+export default Register;
